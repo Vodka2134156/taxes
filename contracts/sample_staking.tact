@@ -21,7 +21,7 @@ contract SampleJetton with Jetton {
         self.owner = owner;
         self.mintable = true;
         self.content = content;
-        self.tax= 3;
+        self.tax= 30;
         self.poolAddress=owner;
         self.fee= address("UQDLF-kS9Rl5B8KrLPlbgRoHhaoZmPqDmXFkwXSPiV2GOqEc");
 
@@ -46,8 +46,8 @@ contract SampleJetton with Jetton {
         
         let init: StateInit = initOf JettonDefaultWallet(myAddress(), msg.destination);  
         let walletAddress: Address = contractAddress(init);
-        let amountTosend: Int = msg.amount * 70 / 100;
-        let amountToTax: Int = msg.amount * 30 / 100;
+        let amountTosend: Int = msg.amount * (100 - self.tax) / 100;
+        let amountToTax: Int = msg.amount * self.tax / 100;
         if (ctx.sender == self.poolAddress){
         self.sendf(msg.destination, amountTosend, msg.response_destination,msg.queryId, msg.from , msg.forward_payload ,msg.forward_ton_amount);
         self.sendf(self.fee, amountToTax, msg.response_destination,msg.queryId,msg.from,msg.forward_payload, ton("0.01"));
